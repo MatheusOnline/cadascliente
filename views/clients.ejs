@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Clientes</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr.red-row {
+            background-color: #ffcccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Clientes Cadastrados</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                    <th>Último Pedido</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% clients.forEach(client => { %>
+                    <tr class="<%= (new Date() - new Date(client.lastOrderDate)) / (1000 * 60 * 60 * 24) > 15 ? 'red-row' : '' %>">
+                        <td><%= client.name %></td>
+                        <td><%= client.phone %></td>
+                        <td><%= client.lastOrderDate.toDateString() %></td>
+                        <td>
+                            <form action="/update-order/<%= client._id %>" method="POST">
+                                <button type="submit">Atualizar Pedido</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+        <a href="/">Voltar ao cadastro</a>
+    </div>
+</body>
+</html>
